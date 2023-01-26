@@ -23,7 +23,6 @@ client.commands = new Collection();
 const commandsPath = path.join(__dirname, "commands");
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith(".js"));
 
-console.log(client.fetchGuildPreview());
 
 //Applying these commands to the client (discord bot)
 for (const file of commandFiles){
@@ -31,9 +30,10 @@ for (const file of commandFiles){
   const command = require(filePath);
   console.log(file);
   console.log(filePath);
+  console.log(command.data.name);
 
-  client.commands.set(command.name, command);
-  commands.push(command);
+  client.commands.set(command.data.name, command);
+  commands.push(command.data.toJSON());
 }
 
 client.player = new Player(client, {
@@ -44,11 +44,11 @@ client.player = new Player(client, {
 });
 
 client.on("ready", () => {
-  const guild_ids = client.guild.cache.map(guild => guild.id);
+  const guild_ids = client.guilds.cache.map(guild => guild.id);
 
   const rest = new REST({version: "9"}).setToken(process.env.TOKEN);
   for (const guildID of guild_ids){
-    rest.put(Routes.applicationsGuildCommands(process.env.CLIENT_ID, guildID), {
+    rest.put(Routes.applicationGuildCommands(process.env.CLIENT_ID, guildID), {
       body: commands
     })
     .then(() => console.log(`Added commands to ${guildID}`)).catch(console.error);
