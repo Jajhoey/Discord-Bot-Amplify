@@ -1,8 +1,7 @@
 require("dotenv").config();
 
-const {REST} = require("@discordjs/rest")
-const { Routes } = require("discord-api-types/v9");
-const {GatewayIntentBits} = require("discord-api-types/v10")
+const { REST } = require("@discordjs/rest")
+const {GatewayIntentBits, Routes} = require("discord-api-types/v10")
 const { Client, Intents, Collection} = require("discord.js");
 const { Player } = require("discord-player");
 
